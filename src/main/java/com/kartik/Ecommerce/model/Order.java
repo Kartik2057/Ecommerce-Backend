@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "_order")
 public class Order {
 
     @Id
@@ -36,9 +37,10 @@ public class Order {
 
     private Double totalPrice;
 
-    private Double totalDiscountedPrice;
+    private Integer totalDiscountedPrice;
     private Integer discount;
-    private String orderStatus;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
     private int totalItem;
     private LocalDateTime createdAt;
 }
