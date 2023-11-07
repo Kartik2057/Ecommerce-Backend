@@ -28,4 +28,5 @@ public class Review {
     private User user;
 
     private LocalDateTime createdAt;
+    private String review;
 }

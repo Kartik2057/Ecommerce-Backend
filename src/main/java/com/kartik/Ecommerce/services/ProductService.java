@@ -23,4 +23,6 @@ public interface ProductService {
                                         String stock,
                                         Integer pageNo,
                                         Integer pageSize);
+
+    List<Product> findAllProducts();
 }

@@ -20,7 +20,7 @@ import java.util.List;
 public class OrderServiceImplementation implements OrderService{
 
     private CartRepository cartRepository;
-//    private CartItemService cartItemService;
+    private CartItemService cartItemService;
     private ProductService productService;
     @Override
     public Order createOrder(User user, Address shippingAddress) {
@@ -44,6 +44,11 @@ public class OrderServiceImplementation implements OrderService{
 
     @Override
     public void deleteOrder(Long orderId) throws OrderException {
+
+    }
+
+    @Override
+    public Order findOrderById(Long orderId) {
 
     }
 }
