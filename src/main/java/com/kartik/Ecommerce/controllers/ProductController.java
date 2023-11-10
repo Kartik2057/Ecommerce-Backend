@@ -20,7 +20,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<Page<Product>> findProductByCategory(       @RequestParam String category,
                                                                       @RequestParam List<String> color,
                                                                       @RequestParam List<String> size,
@@ -30,9 +30,9 @@ public class ProductController {
                                                                       @RequestParam String sort,
                                                                       @RequestParam String stock,
                                                                       @RequestParam Integer pageNumber,
-                                                                      @RequestParam Integer pageSize){
-        Page<Product> res = productService.getAllProducts(category, color, size, minPrice, maxPrice, minDiscount, sort, stock, pageNumber, pageSize);
-        System.out.println("complete products");
+                                                                      @RequestParam Integer pageSize)throws ProductException{
+        Page<Product> res = productService.filterProducts(category, color, size, minPrice, maxPrice, minDiscount, sort, stock, pageNumber, pageSize);
+//        System.out.println("complete products");
         return new ResponseEntity<>(res, HttpStatus.ACCEPTED);
     }
 
@@ -41,7 +41,4 @@ public class ProductController {
         Product product = productService.findProductById(productId);
         return new ResponseEntity<>(product,HttpStatus.ACCEPTED);
     }
-
-
-
 }
