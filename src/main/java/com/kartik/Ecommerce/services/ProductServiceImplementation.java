@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,6 +45,7 @@ public class ProductServiceImplementation implements ProductService{
             Category secondLevelCategory = new Category();
             secondLevelCategory.setName(request.getSecondLevelCategory());
             secondLevelCategory.setLevel(2);
+            secondLevelCategory.setParentCategory(firstLevel);
             secondLevel = categoryRepository.save(secondLevelCategory);
         }
         Category thirdLevel = categoryRepository.findByNameAndParent(request.getThirdLevelCategory(), secondLevel.getName());
@@ -50,6 +53,7 @@ public class ProductServiceImplementation implements ProductService{
             Category thirdLevelCategory = new Category();
             thirdLevelCategory.setName(request.getThirdLevelCategory());
             thirdLevelCategory.setLevel(3);
+            thirdLevelCategory.setParentCategory(secondLevel);
             thirdLevel = categoryRepository.save(thirdLevelCategory);
         }
 
@@ -104,7 +108,7 @@ public class ProductServiceImplementation implements ProductService{
     }
 
     @Override
-    public Page<Product> getAllProducts(
+    public Page<Product> filterProducts(
             String category,
             List<String> colors,
             List<String> sizes,
@@ -118,8 +122,8 @@ public class ProductServiceImplementation implements ProductService{
         Pageable pageable = PageRequest.of(pageNo,pageSize);
 
         List<Product> products = productRepository.filterProducts(category, minPrice, maxPrice, minDiscount,sort);
-
-        if (colors.isEmpty()){
+//        System.out.println(products);
+        if (!colors.isEmpty()){
             products=products
                     .stream()
                     .filter(p->colors
@@ -143,6 +147,10 @@ public class ProductServiceImplementation implements ProductService{
                                 p->p.getQuantity()<1
                          ).collect(Collectors.toList());
         }
+        if(sort.equals("price_low"))
+            Collections.sort(products, Comparator.comparingInt(Product::getDiscountedPrice));
+        else
+            Collections.sort(products, Comparator.comparingInt(Product::getDiscountedPrice).reversed());
 
         int startIndex = (int) pageable.getOffset();
         int endIndex = Math.min(startIndex+pageable.getPageSize(),products.size());
