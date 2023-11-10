@@ -24,21 +24,24 @@ public class JwtValidator extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = request.getHeader(JwtConstant.JWT_HEADER);
         if(jwt!=null){
-            //Because of bearer token
+//            Because of bearer token
             jwt = jwt.substring(7);
             try{
                 SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
-                Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJwt(jwt).getBody();
+//                System.out.println("Keys "+key);
+                Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+//                System.out.println("Claims "+claims);
                 String email = String.valueOf(claims.get("email"));
+//                System.out.println("Email "+email);
                 String authorities = String.valueOf(claims.get("authorities"));
-
                 List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
                 Authentication authentication  =new UsernamePasswordAuthenticationToken(email,null,auths);
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             catch ( Exception e){
-                throw new BadCredentialsException("invalid token... from jwt validator");
+                System.out.println(jwt);
+                logger.error("Error verifying JWT token: " + e.getMessage());
+                throw new BadCredentialsException("Invalid token... from jwt validator");
             }
         }
         filterChain.doFilter(request,response);
