@@ -2,10 +2,12 @@ package com.kartik.Ecommerce.controllers;
 
 import com.kartik.Ecommerce.config.JwtProvider;
 import com.kartik.Ecommerce.exception.UserException;
+import com.kartik.Ecommerce.model.Cart;
 import com.kartik.Ecommerce.model.User;
 import com.kartik.Ecommerce.repositories.UserRepository;
 import com.kartik.Ecommerce.requests.LoginRequest;
 import com.kartik.Ecommerce.response.AuthResponse;
+import com.kartik.Ecommerce.services.CartService;
 import com.kartik.Ecommerce.services.CustomUserServiceImplementation;
 import jdk.jshell.spi.ExecutionControl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private CustomUserServiceImplementation customUserServiceImplementation;
+    @Autowired
+    private CartService cartService;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws ExecutionControl.UserException, UserException {
@@ -54,6 +58,7 @@ public class AuthController {
         createdUser.setLastName(lastName);
 
         User savedUser  = userRepository.save(createdUser);
+        Cart cart = cartService.createCart(savedUser);
 
         Authentication authentication  = new UsernamePasswordAuthenticationToken(createdUser.getEmail(),createdUser.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);

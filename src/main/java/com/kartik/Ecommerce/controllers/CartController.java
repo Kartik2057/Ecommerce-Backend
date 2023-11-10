@@ -23,7 +23,7 @@ public class CartController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<Cart> findUserCart(@RequestHeader("Authorization")String jwt)throws UserException{
         User user = userService.findUserProfileByJwt(jwt);
         Cart cart = cartService.findUserCart(user.getId());

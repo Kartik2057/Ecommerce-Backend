@@ -40,6 +40,6 @@ public class ReviewController {
     )throws UserException,ProductException
     {
         List<Review> reviews = reviewService.getAllReviews(productId);
-        return new ResponseEntity<>(reviews,HttpStatus.OK);
+        return new ResponseEntity<>(reviews,HttpStatus.ACCEPTED);
     }
 }
