@@ -71,7 +71,6 @@ public class CartServiceImplementation implements CartService{
         int totalDiscountedPrice = 0;
         int totalItem=0;
 
-        System.out.println("cartImple : "+cart.getCartItems());
         for(CartItem cartItem:cart.getCartItems()){
             totalPrice+= cartItem.getPrice();
             totalDiscountedPrice+=cartItem.getDiscountedPrice();
@@ -85,16 +84,4 @@ public class CartServiceImplementation implements CartService{
 
         return cartRepository.save(cart);
     }
-
-//    @Override
-//    public String toString() {
-//        return "CartItem(id=" + id +
-//                ", product=" + product.getTitle() + // Include relevant fields instead of the entire Product
-//                ", size=" + size +
-//                ", quantity=" + quantity +
-//                ", price=" + price +
-//                ", discountedPrice=" + discountedPrice +
-//                ", userId=" + userId +
-//                ")";
-//    }
 }
