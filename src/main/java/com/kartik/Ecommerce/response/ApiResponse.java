@@ -1,12 +1,13 @@
 package com.kartik.Ecommerce.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApiResponse {
-
-    public void setMessage(String orderDeletedSuccessfully) {
-
-    }
-
-    public void setStatus(boolean b) {
-
-    }
+    private String message;
+    private boolean status;
 }
