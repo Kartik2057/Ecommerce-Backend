@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -18,9 +20,11 @@ public class CartItem {
 
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
     private String size;
@@ -28,4 +32,14 @@ public class CartItem {
     private Integer price;
     private Integer discountedPrice;
     private Long userId;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "CartItem{id=" + id + ", product=" + (product != null ? product.getId() : null) + ", cart=" + (cart != null ? cart.getId() : null) + ", size='" + size + "', quantity=" + quantity + ", price=" + price + "}";
+    }
 }

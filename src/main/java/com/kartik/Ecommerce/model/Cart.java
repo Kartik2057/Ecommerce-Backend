@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -21,11 +22,21 @@ public class Cart {
     @JoinColumn(name="user_id",nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<CartItem> cartItems = new HashSet<>();
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
+    private Set<CartItem> cartItems = new HashSet<CartItem>();
 
     private int totalPrice;
     private int totalItem;
     private int totalDiscountedPrice;
     private int discount;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Cart{id=" + id + ", user=" + (user != null ? user.getId() : null) + ", cartItems=" + cartItems + ", totalPrice=" + totalPrice + "}";
+    }
 }
