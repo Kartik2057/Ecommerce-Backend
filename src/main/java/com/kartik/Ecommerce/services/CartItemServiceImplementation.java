@@ -34,7 +34,6 @@ public class CartItemServiceImplementation implements CartItemService{
         cartItem.setQuantity(1);
         cartItem.setPrice(cartItem.getProduct().getPrice()* cartItem.getQuantity());
         cartItem.setDiscountedPrice(cartItem.getProduct().getDiscountedPrice()* cartItem.getQuantity());
-
         CartItem createdCartItem = cartItemRepository.save(cartItem);
         return createdCartItem;
     }
@@ -65,12 +64,12 @@ public class CartItemServiceImplementation implements CartItemService{
     public void removeCartItem(Long userId, Long cartItemId) throws CartItemException, UserException {
         CartItem cartItem = findCartItemById(cartItemId);
         User user = userService.findUserById(cartItem.getUserId());
-        User reqUser = userService.findUserById(userId);
-        if(user.getId()== reqUser.getId()){
+
+        if(user.getId()== userId){
             cartItemRepository.deleteById(cartItemId);
+            return;
         }
         throw new CartItemException("You can't delete this item from cart");
-
     }
 
     @Override
