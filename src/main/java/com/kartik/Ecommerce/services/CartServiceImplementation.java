@@ -9,11 +9,14 @@ import com.kartik.Ecommerce.model.Product;
 import com.kartik.Ecommerce.model.User;
 import com.kartik.Ecommerce.repositories.CartRepository;
 import com.kartik.Ecommerce.requests.AddItemRequest;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 @Data
@@ -36,10 +39,10 @@ public class CartServiceImplementation implements CartService{
     }
 
     @Override
+    @Transactional
     public String addCartItem(Long userId, AddItemRequest request) throws ProductException {
         Cart cart = cartRepository.findByUserId(userId);
         Product product = productService.findProductById(request.getProductId());
-
         CartItem isPresent = cartItemService.isCartItemExists(cart,product,request.getSize(),userId);
 
         if(isPresent==null){
@@ -52,11 +55,12 @@ public class CartServiceImplementation implements CartService{
             int price = request.getQuantity() * product.getDiscountedPrice();
             cartItem.setPrice(price);
             cartItem.setSize(request.getSize());
-
             CartItem createdCartItem = cartItemService.createCartItem(cartItem);
             cart.getCartItems().add(createdCartItem);
+            cartRepository.save(cart);
+            return "Cart Item added successfully";
         }
-        return null;
+        return "Cart Item already existed";
     }
 
     @Override
@@ -67,6 +71,7 @@ public class CartServiceImplementation implements CartService{
         int totalDiscountedPrice = 0;
         int totalItem=0;
 
+        System.out.println("cartImple : "+cart.getCartItems());
         for(CartItem cartItem:cart.getCartItems()){
             totalPrice+= cartItem.getPrice();
             totalDiscountedPrice+=cartItem.getDiscountedPrice();
@@ -80,4 +85,16 @@ public class CartServiceImplementation implements CartService{
 
         return cartRepository.save(cart);
     }
+
+//    @Override
+//    public String toString() {
+//        return "CartItem(id=" + id +
+//                ", product=" + product.getTitle() + // Include relevant fields instead of the entire Product
+//                ", size=" + size +
+//                ", quantity=" + quantity +
+//                ", price=" + price +
+//                ", discountedPrice=" + discountedPrice +
+//                ", userId=" + userId +
+//                ")";
+//    }
 }
