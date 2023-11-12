@@ -35,7 +35,7 @@ public class Order {
     @Embedded
     private PaymentDetails paymentDetails = new PaymentDetails();
 
-    private Double totalPrice;
+    private Integer totalPrice;
 
     private Integer totalDiscountedPrice;
     private Integer discount;
