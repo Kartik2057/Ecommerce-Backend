@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -43,4 +44,29 @@ public class Order {
     private OrderStatus orderStatus;
     private int totalItem;
     private LocalDateTime createdAt;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderId='" + orderId + '\'' +
+                ", user=" + (user != null ? user : "null") +
+                ", orderItems=" + orderItems +
+                ", orderDate=" + orderDate +
+                ", deliveryDate=" + deliveryDate +
+                ", shippingAddress=" + shippingAddress +
+                ", paymentDetails=" + paymentDetails +
+                ", totalPrice=" + totalPrice +
+                ", totalDiscountedPrice=" + totalDiscountedPrice +
+                ", discount=" + discount +
+                ", orderStatus=" + orderStatus +
+                ", totalItem=" + totalItem +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

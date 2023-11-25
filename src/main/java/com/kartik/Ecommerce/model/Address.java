@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -31,7 +33,7 @@ public class Address {
     private String state;
 
     @Column(name = "zip_code")
-    private String zipCode;
+    private String zipcode;
 
 
     @ManyToOne
@@ -40,4 +42,24 @@ public class Address {
     private User user;
 
     private String mobile;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", streetAddress='" + streetAddress + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zipCode='" + zipcode + '\'' +
+                ", user=" + (user != null ? user.getId() : "null") +
+                ", mobile='" + mobile + '\'' +
+                '}';
+    }
 }
