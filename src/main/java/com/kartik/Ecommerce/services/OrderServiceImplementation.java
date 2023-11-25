@@ -6,6 +6,7 @@ import com.kartik.Ecommerce.repositories.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,27 +20,39 @@ import java.util.Optional;
 @NoArgsConstructor
 public class OrderServiceImplementation implements OrderService{
 
-    private CartRepository cartRepository;
+    @Autowired
     private CartItemService cartItemService;
-    private ProductService productService;
+    @Autowired
+    private CartRepository cartRepository;
+    @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private ProductService productService;
+    @Autowired
     private OrderRepository orderRepository;
+    @Autowired
     private OrderItemRepository orderItemRepository;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private CartService cartService;
+
     @Override
     public Order createOrder(User user, Address shippingAddress) {
         shippingAddress.setUser(user);
         Address address = addressRepository.save(shippingAddress);
         user.getAddresses().add(address);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+//        System.out.println(savedUser);
+//        System.out.println(address);
 
         Cart cart = cartService.findUserCart(user.getId());
+
         //New orderItems List for adding to the order
         List<OrderItem> orderItems = new ArrayList<>();
 
+        //Creating new orderItem for adding to the orderItems list
         for(CartItem cartItem:cart.getCartItems()){
-            //Creating new orderItem for adding to the orderItems list
             OrderItem orderItem = new OrderItem();
             orderItem.setPrice(cartItem.getPrice());
             orderItem.setProduct(cartItem.getProduct());
@@ -56,6 +69,7 @@ public class OrderServiceImplementation implements OrderService{
 
         Order createdOrder = new Order();
         createdOrder.setOrderItems(orderItems);
+        createdOrder.setUser(savedUser);
         createdOrder.setTotalPrice(cart.getTotalPrice());
         createdOrder.setTotalDiscountedPrice(cart.getTotalDiscountedPrice());
         createdOrder.setDiscount(cart.getDiscount());
@@ -67,14 +81,13 @@ public class OrderServiceImplementation implements OrderService{
         createdOrder.setCreatedAt(LocalDateTime.now());
 
         Order savedOrder = orderRepository.save(createdOrder);
-
+//        System.out.println("Saved Order : "+savedOrder);
 
         //Updating savedOrder information in all the orderItems
         for(OrderItem item:orderItems){
             item.setOrder(savedOrder);
             orderItemRepository.save(item);
         }
-
         return savedOrder;
     }
 
