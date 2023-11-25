@@ -31,7 +31,7 @@ public class OrderController {
 
         Order order = orderService.createOrder(user,shippingAddress);
 
-        System.out.println("order "+order);
+//        System.out.println("order "+order);
         return new ResponseEntity<Order>(order, HttpStatus.CREATED);
     }
 
