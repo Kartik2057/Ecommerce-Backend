@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -31,4 +32,24 @@ public class OrderItem {
     private Integer discountedPrice;
     private Long userId;
     private LocalDateTime deliveryDate;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", order=" + (order != null ? order.getId() : "null") +
+                ", product=" + (product != null ? product.getId() : "null") +
+                ", size='" + size + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", discountedPrice=" + discountedPrice +
+                ", userId=" + userId +
+                ", deliveryDate=" + deliveryDate +
+                '}';
+    }
 }
