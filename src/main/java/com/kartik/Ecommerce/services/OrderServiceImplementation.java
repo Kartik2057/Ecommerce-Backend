@@ -61,12 +61,11 @@ public class OrderServiceImplementation implements OrderService{
             orderItem.setUserId(cartItem.getUserId());
             orderItem.setDiscountedPrice(cartItem.getDiscountedPrice());
 
-
             OrderItem savedOrderItem = orderItemRepository.save(orderItem);
             orderItems.add(savedOrderItem);
         }
 
-
+        System.out.println("Order Items created successfully");
         Order createdOrder = new Order();
         createdOrder.setOrderItems(orderItems);
         createdOrder.setUser(savedUser);
@@ -76,7 +75,7 @@ public class OrderServiceImplementation implements OrderService{
         createdOrder.setTotalItem(cart.getTotalItem());
         createdOrder.setShippingAddress(address);
         createdOrder.setOrderDate(LocalDateTime.now());
-        createdOrder.setOrderStatus(OrderStatus.ORDER_PLACED);
+        createdOrder.setOrderStatus(OrderStatus.ORDER_PENDING);
         createdOrder.getPaymentDetails().setStatus("PENDING");
         createdOrder.setCreatedAt(LocalDateTime.now());
 

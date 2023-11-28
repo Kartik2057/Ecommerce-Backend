@@ -49,8 +49,9 @@ public class CartItemServiceImplementation implements CartItemService{
             item.setDiscountedPrice(item.getQuantity()*item.getProduct().getDiscountedPrice());
         }
         else {
-            throw new UserException("Cart does not belog to user - "+user);
+            throw new UserException("Cart does not belong to user - "+user);
         }
+        System.out.println(item.getDiscountedPrice());
         return cartItemRepository.save(item);
     }
 
