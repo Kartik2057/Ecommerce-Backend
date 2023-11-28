@@ -34,7 +34,8 @@ public class AppConfig {
                    CorsConfiguration corsConfiguration = new CorsConfiguration();
                    corsConfiguration.setAllowedOrigins(Arrays.asList(
                            "http://localhost:3000",
-                           "http://localhost:4200"
+                           "http://localhost:4200",
+                           "https://tailored-clothing.vercel.app"
                    ));
                    corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
                    corsConfiguration.setAllowCredentials(true);
